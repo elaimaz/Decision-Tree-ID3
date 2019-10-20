@@ -34,7 +34,7 @@ public class AppleCycle : MonoBehaviour
         yield return new WaitForSeconds(time);
         if (appleCount < 2)
         {
-            apple[appleCount].SetActive(false);
+            Destroy(apple[appleCount]);
             appleCount++;
             apple[appleCount].SetActive(true);
             appleChange();
