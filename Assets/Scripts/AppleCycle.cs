@@ -9,7 +9,7 @@ public class AppleCycle : MonoBehaviour
     private float time = 0;
     private int appleCount = 0;
 
-    private float timeDebug = 0;
+    //private float timeDebug = 0;
     void Start()
     {
         apple[0].SetActive(true);
@@ -25,7 +25,7 @@ public class AppleCycle : MonoBehaviour
     private void appleChange()
     {
         time = Random.Range(10.0f, 20.0f);
-        timeDebug = time;
+        //timeDebug = time;
         StartCoroutine(AppleChangeTime());
     }
 
