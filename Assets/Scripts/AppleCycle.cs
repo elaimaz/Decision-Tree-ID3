@@ -4,31 +4,35 @@ using UnityEngine;
 
 public class AppleCycle : MonoBehaviour
 {
+    //Apple objects, 0 green, 1 normal, 2 rotting.
     [SerializeField]
     private GameObject[] apple;
+    //Apple phase time control
     private float time = 0;
+    //What apple is used, 0 green, 1 normal, 2 rotting.
     private int appleCount = 0;
-
-    //private float timeDebug = 0;
+    //Rigidbody to use gravity.
+    private Rigidbody rb;
+    //
+    private float fallChance = 0;
+   
+    //Active first apple, call appleChange() and atribute Rigidbody to rb.
     void Start()
     {
         apple[0].SetActive(true);
         appleChange();
+        rb = gameObject.GetComponent<Rigidbody>();
+        InvokeRepeating("randomFall", 0f, 1f);
     }
 
-    /*private void Update()
-    {
-        timeDebug -= Time.deltaTime;
-        Debug.Log(timeDebug);
-    }*/
-
+    //randomize phase time of the apple and call AppleChangeTime().
     private void appleChange()
     {
         time = Random.Range(10.0f, 20.0f);
-        //timeDebug = time;
         StartCoroutine(AppleChangeTime());
     }
 
+    //Wait time to change apple lifephase.
     private IEnumerator AppleChangeTime()
     {
         yield return new WaitForSeconds(time);
@@ -42,6 +46,22 @@ public class AppleCycle : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
+        }
+    }
+
+    //Calculate change of apple fall from tree. 5% of chance when green, 15% when red, 30% when rotting.
+    private void randomFall()
+    {
+        fallChance = Random.Range(0.0f, 100.0f);
+        if (appleCount == 0 && fallChance >= 95.0f)
+        {
+            rb.useGravity = true;
+        }else if (appleCount == 1 && fallChance >= 85)
+        {
+            rb.useGravity = true;
+        }else if (appleCount == 2 && fallChance >= 70)
+        {
+            rb.useGravity = true;
         }
     }
 }
