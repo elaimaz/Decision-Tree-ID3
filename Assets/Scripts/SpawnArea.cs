@@ -13,36 +13,19 @@ public class SpawnArea : MonoBehaviour
     private GameObject spawnApple;
     //Number os apples per season
     private int randomApples;
-    //Season timer, used to spawn more apples
-    [SerializeField]
-    private float seasonTimer = 60f;
     
-    //Set Y spawn position and call Randomizer().
+    //Set Y spawn position and call Randomizer() at every 60 seconds.
     private void Start()
     {
         spawnPosition.y = this.gameObject.transform.position.y;
-        Randomizer();
-        SpawnApple();
-    }
-
-    //Count season timer, Call Randomizer() and SpawnApple() at the end of every season.
-    void Update()
-    {
-        seasonTimer -= Time.deltaTime;
-        //Debug.Log(seasonTimer);
-        if (seasonTimer <= 0)
-        {
-            Randomizer();
-            SpawnApple();
-            seasonTimer = 60f;
-        }
+        InvokeRepeating("Randomizer", 1f, 60f);
     }
 
     //Randomize the number o apples per season.
     private void Randomizer()
     {
         randomApples = Random.Range(0, 100);
-        Debug.Log(randomApples);
+        SpawnApple();
     }
 
     //Randomize spawn X and Z position and Instantiate for each apple
