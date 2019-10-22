@@ -49,17 +49,17 @@ public class AppleCycle : MonoBehaviour
         }
     }
 
-    //Calculate change of apple fall from tree. 5% of chance when green, 15% when red, 30% when rotting.
+    //Calculate the change of a apple fall from the tree. 1% of chance when green, 10% when red, 20% when rotting, this happens every second.
     private void randomFall()
     {
         fallChance = Random.Range(0.0f, 100.0f);
-        if (appleCount == 0 && fallChance >= 95.0f)
+        if (appleCount == 0 && fallChance >= 99.0f)
         {
             rb.useGravity = true;
-        }else if (appleCount == 1 && fallChance >= 85)
+        }else if (appleCount == 1 && fallChance >= 90)
         {
             rb.useGravity = true;
-        }else if (appleCount == 2 && fallChance >= 70)
+        }else if (appleCount == 2 && fallChance >= 80)
         {
             rb.useGravity = true;
         }
