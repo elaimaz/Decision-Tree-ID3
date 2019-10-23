@@ -11,6 +11,8 @@ public class PlayerScript : MonoBehaviour
     private int starvationLevel = 0;
     //Control death, false = alive, true = you are death... srry.
     private bool death = false;
+    //Draw circle size
+    public float circleSize = 3f;
 
     //Update bar situation to player
     public void StatusUpdate(string barName, int status)
