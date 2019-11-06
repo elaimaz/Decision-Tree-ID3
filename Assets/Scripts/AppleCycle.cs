@@ -13,7 +13,7 @@ public class AppleCycle : MonoBehaviour
     private int appleCount = 0;
     //Rigidbody to use gravity.
     private Rigidbody rb;
-    //
+    //the probability of the apple fall.
     private float fallChance = 0;
    
     //Active first apple, call appleChange() and atribute Rigidbody to rb.

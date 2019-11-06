@@ -493,6 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starvationLevel: 0
+  circleSize: 6.1
 --- !u!1 &1603088148
 GameObject:
   m_ObjectHideFlags: 0
