@@ -28,8 +28,7 @@ public class AppleSight : MonoBehaviour
         }
         //Distance between player and apple.
         float distance = Vector3.Distance(this.transform.position, playerTransform.position);
-        Debug.Log(distance);
         //Call playerConeView to test the sight of the "Player"
-        playerConeView.Sight(this.transform.position);
+        playerConeView.Sight(this.transform.position, distance);
     }
 }

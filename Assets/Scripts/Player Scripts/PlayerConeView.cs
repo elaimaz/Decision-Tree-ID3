@@ -9,7 +9,7 @@ public class PlayerConeView : MonoBehaviour
     private float cutoff = 45f;
 
     //Return true if he can see an apple in his front
-    public bool Sight(Vector3 inputPoint)
+    public bool Sight(Vector3 inputPoint, float distance)
     {
         //Get the cosene of the angle between the foward vector from player and the vector from the apple
         float cosAngle = Vector3.Dot((inputPoint - this.transform.position).normalized, this.transform.forward);

@@ -33,8 +33,8 @@ public class SpawnArea : MonoBehaviour
     {
         for (int i = 0; i < randomApples; i++)
         {
-            spawnPosition.x = Random.insideUnitSphere.x * 3.7f;
-            spawnPosition.z = Random.insideUnitSphere.z * 3.7f;
+            spawnPosition.x = Random.insideUnitSphere.x * 3.7f + this.transform.position.x;
+            spawnPosition.z = Random.insideUnitSphere.z * 3.7f + this.transform.position.z;
             spawnApple = Instantiate(spawnObject, spawnPosition, Quaternion.identity);
             spawnApple.transform.parent = this.gameObject.transform.parent;
         }
