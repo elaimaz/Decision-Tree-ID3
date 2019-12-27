@@ -17,13 +17,16 @@ public class SpawnArea : MonoBehaviour
     //Set Y spawn position and call Randomizer() at every 60 seconds.
     private void Start()
     {
+        //Get the height of the spawn position.
         spawnPosition.y = this.gameObject.transform.position.y;
+        //Repeat Randomizer() at every 1 minute. 
         InvokeRepeating("Randomizer", 1f, 60f);
     }
 
     //Randomize the number o apples per season.
     private void Randomizer()
     {
+        //set a random numer o apples to be spawned from 0 to 100.
         randomApples = Random.Range(0, 100);
         SpawnApple();
     }
@@ -31,11 +34,16 @@ public class SpawnArea : MonoBehaviour
     //Randomize spawn X and Z position and Instantiate for each apple
     private void SpawnApple()
     {
+        //Repeat this to every apple.
         for (int i = 0; i < randomApples; i++)
         {
-            spawnPosition.x = Random.insideUnitSphere.x * 3.7f;
-            spawnPosition.z = Random.insideUnitSphere.z * 3.7f;
+            //Randomize the spawn position on the X axis with a radius of a 3.7 and the position of the spawn gameobject.
+            spawnPosition.x = Random.insideUnitSphere.x * 3.7f + this.transform.position.x;
+            //Randomize the spawn position on the Z axis with a radius of a 3.7 and the position of the spawn gameobject.
+            spawnPosition.z = Random.insideUnitSphere.z * 3.7f + this.transform.position.z;
+            //Instantiate the apple at the random area near the spawn point.
             spawnApple = Instantiate(spawnObject, spawnPosition, Quaternion.identity);
+            //Scale one level in parenting, apples are now child of tree.
             spawnApple.transform.parent = this.gameObject.transform.parent;
         }
     }

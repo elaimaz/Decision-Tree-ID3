@@ -13,16 +13,36 @@ public class AppleCycle : MonoBehaviour
     private int appleCount = 0;
     //Rigidbody to use gravity.
     private Rigidbody rb;
-    //
+    //the probability of the apple fall.
     private float fallChance = 0;
-   
+    //Fall Status of an apple, false = yet in the tree and true = for fall
+    private bool fallStatus = false;
+    //Handler to PlayerConeView script
+    private PlayerScript playerConeView;
+
     //Active first apple, call appleChange() and atribute Rigidbody to rb.
     void Start()
     {
+        //Initialize playerConeView
+        playerConeView = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
         apple[0].SetActive(true);
         appleChange();
         rb = gameObject.GetComponent<Rigidbody>();
         InvokeRepeating("randomFall", 0f, 1f);
+    }
+
+    private void Update()
+    {
+        //If the Player cannot be found then return empty
+        if (playerConeView == null)
+        {
+            return;
+        }
+        if (fallStatus == true)
+        {
+            //Call playerConeView to test the sight of the "Player"
+            playerConeView.Sight(this.transform.position, this.gameObject);
+        }
     }
 
     //randomize phase time of the apple and call AppleChangeTime().
@@ -52,16 +72,23 @@ public class AppleCycle : MonoBehaviour
     //Calculate the change of a apple fall from the tree. 1% of chance when green, 10% when red, 20% when rotting, this happens every second.
     private void randomFall()
     {
+        //Give a random number to fallchance, from 0 to 100.
         fallChance = Random.Range(0.0f, 100.0f);
         if (appleCount == 0 && fallChance >= 99.0f)
         {
+            //Activate apple rigidbody.
             rb.useGravity = true;
+            //Set fall status to true.
+            fallStatus = true;
         }else if (appleCount == 1 && fallChance >= 90)
         {
             rb.useGravity = true;
-        }else if (appleCount == 2 && fallChance >= 80)
+            fallStatus = true;
+        }
+        else if (appleCount == 2 && fallChance >= 80)
         {
             rb.useGravity = true;
+            fallStatus = true;
         }
     }
 }
