@@ -16,15 +16,33 @@ public class AppleCycle : MonoBehaviour
     //the probability of the apple fall.
     private float fallChance = 0;
     //Fall Status of an apple, false = yet in the tree and true = for fall
-    public bool fallStatus = false;
-   
+    private bool fallStatus = false;
+    //Handler to PlayerConeView script
+    private PlayerScript playerConeView;
+
     //Active first apple, call appleChange() and atribute Rigidbody to rb.
     void Start()
     {
+        //Initialize playerConeView
+        playerConeView = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
         apple[0].SetActive(true);
         appleChange();
         rb = gameObject.GetComponent<Rigidbody>();
         InvokeRepeating("randomFall", 0f, 1f);
+    }
+
+    private void Update()
+    {
+        //If the Player cannot be found then return empty
+        if (playerConeView == null)
+        {
+            return;
+        }
+        if (fallStatus == true)
+        {
+            //Call playerConeView to test the sight of the "Player"
+            playerConeView.Sight(this.transform.position, this.gameObject);
+        }
     }
 
     //randomize phase time of the apple and call AppleChangeTime().
