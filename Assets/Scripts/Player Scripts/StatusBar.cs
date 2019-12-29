@@ -36,9 +36,11 @@ public class StatusBar : MonoBehaviour
     //Subtract bar points, change bar image.
     private void DownBar()
     {
+        //Drop health.
         health -= dropRate;
+        //Divide the bar in 100 pieces and then fill with the amount of health.
         barImage.fillAmount = health / 100f;
-
+        //Check the level of starvation and change the color of the bar if needed.
         if (health <= 50)
         {
             barImage.color = Color.yellow;
@@ -49,5 +51,25 @@ public class StatusBar : MonoBehaviour
             barImage.color = Color.red;
             player.StatusUpdate(barName, 2);
         }
+    }
+
+    //This method will increacese the bar fill.
+    public void AppleUp(int appleEat)
+    {
+        //buff health.
+        health += appleEat;
+        barImage.fillAmount = health / 100f;
+        //Check the level of the bar and change color of it, if needed.
+        if (health > 20)
+        {
+            barImage.color = Color.yellow;
+            player.StatusUpdate(barName, 1);
+        }
+        if (health > 50)
+        {
+            barImage.color = Color.green;
+            player.StatusUpdate(barName, 0);
+        }
+        
     }
 }

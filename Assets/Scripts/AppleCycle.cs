@@ -18,13 +18,14 @@ public class AppleCycle : MonoBehaviour
     //Fall Status of an apple, false = yet in the tree and true = for fall
     private bool fallStatus = false;
     //Handler to PlayerConeView script
-    private PlayerScript playerConeView;
+    private PlayerScript playerScript;
 
     //Active first apple, call appleChange() and atribute Rigidbody to rb.
     void Start()
     {
         //Initialize playerConeView
-        playerConeView = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
+        playerScript = GameObject.FindWithTag("Player").GetComponent<PlayerScript>();
+        //Active green apple
         apple[0].SetActive(true);
         appleChange();
         rb = gameObject.GetComponent<Rigidbody>();
@@ -34,14 +35,36 @@ public class AppleCycle : MonoBehaviour
     private void Update()
     {
         //If the Player cannot be found then return empty
-        if (playerConeView == null)
+        if (playerScript == null)
         {
             return;
         }
         if (fallStatus == true)
         {
             //Call playerConeView to test the sight of the "Player"
-            playerConeView.Sight(this.transform.position, this.gameObject);
+            playerScript.Sight(this.transform.position, this.gameObject);
+        }
+    }
+
+    //WHen the player touches the apple the health bar will go up
+    private void OnTriggerEnter(Collider other)
+    {
+        int appleGeneratedHealth = 1;
+        if (appleCount == 0)
+        {
+            appleGeneratedHealth = 5;
+        }else if (appleCount == 1)
+        {
+            appleGeneratedHealth = 10;
+        }
+        else
+        {
+            appleGeneratedHealth = 1;
+        }
+        if (other.tag == "Player")
+        {
+            playerScript.EatApple(appleGeneratedHealth);
+            Destroy(this.gameObject);
         }
     }
 

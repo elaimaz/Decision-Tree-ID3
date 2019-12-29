@@ -16,6 +16,13 @@ public class PlayerScript : MonoBehaviour
     private float cutoff = 45f;
     //List of apples that the AI will know of.
     protected List<GameObject> appleList = new List<GameObject>();
+    //Handler to starvation Bar
+    private StatusBar starvationBar;
+
+    private void Start()
+    {
+        starvationBar = GameObject.Find("Starve Bar Image").GetComponent<StatusBar>();
+    }
 
     private void Update()
     {
@@ -101,5 +108,11 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         NearestApple();
+    }
+
+    //Call AppleUP from statusBar script, this will buff player bar.
+    public void EatApple(int appleEat)
+    {
+        starvationBar.AppleUp(appleEat);
     }
 }
