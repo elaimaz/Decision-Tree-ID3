@@ -8,7 +8,7 @@ public class StatusBar : MonoBehaviour
     [Header("Type of Bar")]
     //Choose bar name.
     [SerializeField]
-    private string barName;
+    private string barName = "";
     //Get component image for this object
     private Image barImage;
     //Total Health
@@ -44,12 +44,12 @@ public class StatusBar : MonoBehaviour
         if (health <= 50)
         {
             barImage.color = Color.yellow;
-            player.StatusUpdate(barName, 1);
+            player.StatusUpdate(barName, 1, health);
         }
         if (health <= 20)
         {
             barImage.color = Color.red;
-            player.StatusUpdate(barName, 2);
+            player.StatusUpdate(barName, 2, health);
         }
     }
 
@@ -63,12 +63,12 @@ public class StatusBar : MonoBehaviour
         if (health > 20)
         {
             barImage.color = Color.yellow;
-            player.StatusUpdate(barName, 1);
+            player.StatusUpdate(barName, 1, health);
         }
         if (health > 50)
         {
             barImage.color = Color.green;
-            player.StatusUpdate(barName, 0);
+            player.StatusUpdate(barName, 0, health);
         }
         
     }
