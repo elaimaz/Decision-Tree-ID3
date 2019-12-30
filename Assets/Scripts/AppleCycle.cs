@@ -39,7 +39,7 @@ public class AppleCycle : MonoBehaviour
         {
             return;
         }
-        if (fallStatus == true)
+        if (fallStatus == true && playerScript.searchingApple == true)
         {
             //Call playerConeView to test the sight of the "Player"
             playerScript.Sight(this.transform.position, this.gameObject);
@@ -64,6 +64,8 @@ public class AppleCycle : MonoBehaviour
         if (other.tag == "Player")
         {
             playerScript.EatApple(appleGeneratedHealth);
+            //Desalocate all list
+            playerScript.CleanList();
             Destroy(this.gameObject);
         }
     }
