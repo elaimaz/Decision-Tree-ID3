@@ -569,6 +569,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   starvationLevel: 0
   cutoff: 45
+  searchingApple: 1
+  resetInList: 0
 --- !u!1 &1603088148
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +771,7 @@ PrefabInstance:
     - target: {fileID: 4188458547866932526, guid: c642d3d0ad73db3499b76f4ce6f7332b,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4194526478176180176, guid: c642d3d0ad73db3499b76f4ce6f7332b,
         type: 3}
