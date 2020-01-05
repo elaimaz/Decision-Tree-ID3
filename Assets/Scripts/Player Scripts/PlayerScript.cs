@@ -19,7 +19,7 @@ public class PlayerScript : MonoBehaviour
     //Handler to starvation Bar
     private StatusBar starvationBar;
     //Variable that controls if the AI is searching or not for apples.
-    public bool searchingApple = true;
+    public bool searchingApple = false;
     //Boolean to control if the AI need to continue going after the apple.
     private bool movingToApple = false;
     //Nearest Apple position variable.
@@ -41,7 +41,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     //This method will decide the decision of the AI.
-    private void Action()
+    public void Action()
     {
         Debug.Log("Action");
         StartCoroutine(StartFinding());
@@ -64,18 +64,26 @@ public class PlayerScript : MonoBehaviour
     //Return true if he can see an apple in his front
     public bool Sight(Vector3 inputPoint, GameObject apple)
     {
+        Debug.Log(appleList.Count);
         //Get the cosene of the angle between the foward vector from player and the vector from the apple
         float cosAngle = Vector3.Dot((inputPoint - this.transform.position).normalized, this.transform.forward);
         //transform the angle from radians to degrees
         float angle = Mathf.Acos(cosAngle) * Mathf.Rad2Deg;
         //Distance between player and apple.
         float distance = Vector3.Distance(this.transform.position, apple.transform.position);
+        //Get Handler to AppleCycle.
+        AppleCycle appleCycle = apple.GetComponent<AppleCycle>();
 
         //If the angle is minor than the cutoff (45 degres) and the distance is minor than 15.0f then the "Player" is seeing the apple.
         if (angle < cutoff && distance < 15.0f)
         {
-            //Insert apple on the list.
-            InsertAppleInList(apple);
+            //Change variable to stop GameObject to continue going on list.
+            if (appleCycle.inList == false)
+            {
+                appleCycle.inList = true;
+                //Insert apple on the list.
+                InsertAppleInList(apple);
+            }
             //Draw a line from the player to the apple.
             Debug.DrawLine(transform.position, inputPoint, Color.red);
             //return true.
@@ -92,8 +100,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void NearestApple()
-    {
-        
+    {     
         //Nearest Apple distance variable.
         float nearest = 1000000000f;
         //Nearest position is initialiaze in the AI position.
@@ -136,6 +143,7 @@ public class PlayerScript : MonoBehaviour
     private IEnumerator StartFinding()
     {
         yield return new WaitForSeconds(10);
+        searchingApple = true;
         NearestApple();
     }
 
@@ -145,8 +153,26 @@ public class PlayerScript : MonoBehaviour
         starvationBar.AppleUp(appleEat);
     }
 
-    public void CleanList()
+    private void CleanList()
     {
+        Debug.Log("CleanList");
         appleList.Clear();
+    }
+
+    //This method will reset the variable of all the apples GameObject in the list appleList.
+    public void ResetInList()
+    {
+        Debug.Log("ResetInList");
+        foreach (GameObject apple in appleList)
+        {
+            //Check if the variable isn't null
+            if (apple != null)
+            {
+                //Handler to AppleCycle script
+                AppleCycle appleCycle = apple.GetComponent<AppleCycle>();
+                appleCycle.inList = false;
+            }
+        }
+        CleanList();
     }
 }

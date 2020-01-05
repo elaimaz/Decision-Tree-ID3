@@ -19,6 +19,8 @@ public class AppleCycle : MonoBehaviour
     private bool fallStatus = false;
     //Handler to PlayerConeView script
     private PlayerScript playerScript;
+    //Controls if the apple is already in the list or not.
+    public bool inList = false;
 
     //Active first apple, call appleChange() and atribute Rigidbody to rb.
     void Start()
@@ -39,6 +41,7 @@ public class AppleCycle : MonoBehaviour
         {
             return;
         }
+        //Check if the apple have already fall, the player is searching for apple and the GameObject isn't in list yet.
         if (fallStatus == true && playerScript.searchingApple == true)
         {
             //Call playerConeView to test the sight of the "Player"
@@ -63,9 +66,10 @@ public class AppleCycle : MonoBehaviour
         }
         if (other.tag == "Player")
         {
+            //Buff Bar
             playerScript.EatApple(appleGeneratedHealth);
             //Desalocate all list
-            playerScript.CleanList();
+            playerScript.ResetInList();
             Destroy(this.gameObject);
         }
     }
