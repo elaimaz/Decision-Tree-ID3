@@ -12,7 +12,7 @@ public class StatusBar : MonoBehaviour
     //Get component image for this object
     private Image barImage;
     //Total Health
-    private float health = 100;
+    public float health = 100;
     
     //Rate of dropping
     [Header("Time Rate of Bar")]

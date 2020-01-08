@@ -21,6 +21,8 @@ public class AppleCycle : MonoBehaviour
     private PlayerScript playerScript;
     //Controls if the apple is already in the list or not.
     public bool inList = false;
+    //Check if it is the apple chosen by the AI.
+    public bool chosenApple = false;
 
     //Active first apple, call appleChange() and atribute Rigidbody to rb.
     void Start()
@@ -53,21 +55,29 @@ public class AppleCycle : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         int appleGeneratedHealth = 1;
+        //Green Apple.
         if (appleCount == 0)
         {
             appleGeneratedHealth = 5;
+        //Red apple
         }else if (appleCount == 1)
         {
             appleGeneratedHealth = 10;
         }
+        //Rotting apple.
         else
         {
             appleGeneratedHealth = 1;
         }
-        if (other.tag == "Player")
+        //If it is the choosen apple then when Ai collides this changes will occur.
+        if (other.tag == "Player" && chosenApple == true)
         {
             //Buff Bar
             playerScript.EatApple(appleGeneratedHealth);
+            //AI is no longer choosing apple.
+            playerScript.searchingApple = false;
+            //AI is no longer doing an action.
+            playerScript.doingAction = false;
             //Desalocate all list
             playerScript.ResetInList();
             Destroy(this.gameObject);
