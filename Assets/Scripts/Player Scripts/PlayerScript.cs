@@ -19,16 +19,19 @@ public class PlayerScript : MonoBehaviour
     //Handler to starvation Bar
     private StatusBar starvationBar;
     //Variable that controls if the AI is searching or not for apples.
+    [SerializeField]
     public bool searchingApple = false;
     //Boolean to control if the AI need to continue going after the apple.
+    [SerializeField]
     private bool movingToApple = false;
     //Nearest Apple position variable.
     private Vector3 nearestPosition;
+    //controler to player doing action.
+    public bool doingAction = false;
 
     private void Start()
     {
         starvationBar = GameObject.Find("Starve Bar Image").GetComponent<StatusBar>();
-        Action();
     }
 
     private void Update()
@@ -37,6 +40,16 @@ public class PlayerScript : MonoBehaviour
         if (movingToApple == true)
         {
             MoveToApple(nearestPosition);
+        }
+        if (starvationBar.health < 100)
+        {
+            searchingApple = true;
+        }
+        //If the lsit o apples are not empty and the player is not doing another action
+        if (appleList.Count > 0 && doingAction == false)
+        {
+            doingAction = true;
+            Action();
         }
     }
 
@@ -100,17 +113,19 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void NearestApple()
-    {     
+    {
         //Nearest Apple distance variable.
         float nearest = 1000000000f;
         //Nearest position is initialiaze in the AI position.
         nearestPosition = this.transform.position;
+        AppleCycle appleCycleScript = null;
         //Check in list the nearest apple
         foreach (GameObject apple in appleList)
         {
             //Check if the object in list is not null
             if (apple != null)
             {
+                searchingApple = true;
                 //Distance variable between player and apple.
                 float distance = Vector3.Distance(apple.transform.position, this.transform.position);
                 //Check if Distance from the apple is lesser than the previous apple
@@ -118,10 +133,15 @@ public class PlayerScript : MonoBehaviour
                 {
                     nearest = distance;
                     nearestPosition = apple.transform.position;
-                    
+                    appleCycleScript = apple.GetComponent<AppleCycle>();
                 }
                 movingToApple = true;
             }
+        }
+        //if the script is not null the variable chosen apple became true, this will control the next behavior of the AI.
+        if (appleCycleScript != null)
+        {
+            appleCycleScript.chosenApple = true;
         }
     }
 
@@ -131,8 +151,6 @@ public class PlayerScript : MonoBehaviour
         if (transform.position.x == positionToMove.x && transform.position.z == positionToMove.z)
         {
             movingToApple = false;
-            //Call action for AI perform another action.
-            Action();
         }
         //Move the AI to the apple position.
         positionToMove = new Vector3(positionToMove.x, this.transform.position.y, positionToMove.z);
@@ -142,8 +160,7 @@ public class PlayerScript : MonoBehaviour
     //Wait 10 seconds to start searching the nearest apple.
     private IEnumerator StartFinding()
     {
-        yield return new WaitForSeconds(10);
-        searchingApple = true;
+        yield return new WaitForSeconds(3);
         NearestApple();
     }
 
@@ -153,9 +170,11 @@ public class PlayerScript : MonoBehaviour
         starvationBar.AppleUp(appleEat);
     }
 
+    //Clean List.
     private void CleanList()
     {
         Debug.Log("CleanList");
+        searchingApple = false;
         appleList.Clear();
     }
 
