@@ -28,6 +28,11 @@ public class PlayerScript : MonoBehaviour
     private Vector3 nearestPosition;
     //controler to player doing action.
     public bool doingAction = false;
+    //Amount of degrees to rotate
+    private float rotationLeft = 360f;
+    //Control if the AI made a rotation.
+    [SerializeField]
+    private bool madeRotation = false;
 
     private void Start()
     {
@@ -36,20 +41,24 @@ public class PlayerScript : MonoBehaviour
 
     private void Update()
     {
-        //While the searching apple is true the AI will move towards the apple.
-        if (movingToApple == true)
-        {
-            MoveToApple(nearestPosition);
-        }
         if (starvationBar.health < 100)
         {
             searchingApple = true;
         }
-        //If the lsit o apples are not empty and the player is not doing another action
-        if (appleList.Count > 0 && doingAction == false)
+        if (madeRotation == false)
+        {
+            RotateAI();
+        }
+        //If the list o apples are not empty and the player is not doing another action
+        if (appleList.Count > 0 && doingAction == false && madeRotation == true)
         {
             doingAction = true;
             Action();
+        }
+        //While the searching apple is true the AI will move towards the apple.
+        if (movingToApple == true)
+        {
+            MoveToApple(nearestPosition);
         }
     }
 
@@ -77,7 +86,7 @@ public class PlayerScript : MonoBehaviour
     //Return true if he can see an apple in his front
     public bool Sight(Vector3 inputPoint, GameObject apple)
     {
-        Debug.Log(appleList.Count);
+        //Debug.Log(appleList.Count);
         //Get the cosene of the angle between the foward vector from player and the vector from the apple
         float cosAngle = Vector3.Dot((inputPoint - this.transform.position).normalized, this.transform.forward);
         //transform the angle from radians to degrees
@@ -145,6 +154,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    //Move AI to apple.
     private void MoveToApple(Vector3 positionToMove)
     {
         //Check if the AI arrived at the apple position.
@@ -194,4 +204,27 @@ public class PlayerScript : MonoBehaviour
         }
         CleanList();
     }
+
+    //Rotate AI in 360 degree.
+    private void RotateAI()
+    {
+        //Degrade rotationLeft over time.
+        float rotation = 20 * Time.deltaTime;
+        if (rotationLeft > rotation)
+        {
+            rotationLeft -= rotation;
+        }
+        else
+        {
+            rotation = rotationLeft;
+            rotationLeft = 0;
+        }
+        //Make rotation in the Y axis.
+        transform.Rotate(0, rotation, 0);
+        if (rotationLeft <= 0)
+        {
+            madeRotation = true;
+        }
+    }
+   
 }
