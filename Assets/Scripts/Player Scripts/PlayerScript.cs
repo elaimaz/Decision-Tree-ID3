@@ -45,6 +45,7 @@ public class PlayerScript : MonoBehaviour
         {
             searchingApple = true;
         }
+        //ROtate AI.
         if (madeRotation == false)
         {
             RotateAI();
@@ -59,6 +60,8 @@ public class PlayerScript : MonoBehaviour
         if (movingToApple == true)
         {
             MoveToApple(nearestPosition);
+            //Look at apple
+            LookAtApple(nearestPosition);
         }
     }
 
@@ -226,5 +229,20 @@ public class PlayerScript : MonoBehaviour
             madeRotation = true;
         }
     }
-   
+
+    //Look to the nearest apple, make the AI face the apple.
+    private void LookAtApple(Vector3 nearestPosition)
+    {
+        Vector3 dir = nearestPosition - transform.position;
+        //Y needs to be zero to the AI not rotate in another Axis.
+        dir.y = 0;
+        //Check if the dir is not zero.
+        if (dir != Vector3.zero)
+        {
+            //Realizes the rotation.
+            Quaternion rot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1.5f * Time.deltaTime);
+        }
+    }
+
 }
