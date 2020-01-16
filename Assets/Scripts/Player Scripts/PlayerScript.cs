@@ -22,17 +22,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     public bool searchingApple = false;
     //Boolean to control if the AI need to continue going after the apple.
-    [SerializeField]
-    private bool movingToApple = false;
+    public bool movingToApple = false;
     //Nearest Apple position variable.
-    private Vector3 nearestPosition;
+    private GameObject appleGameObj;
     //controler to player doing action.
     public bool doingAction = false;
     //Amount of degrees to rotate
-    private float rotationLeft = 360f;
+    public float rotationLeft = 360f;
     //Control if the AI made a rotation.
-    [SerializeField]
-    private bool madeRotation = false;
+    public bool madeRotation = false;
 
     private void Start()
     {
@@ -41,11 +39,12 @@ public class PlayerScript : MonoBehaviour
 
     private void Update()
     {
+        //If health bar is below 100 the AI starts search for apples.
         if (starvationBar.health < 100)
         {
             searchingApple = true;
         }
-        //ROtate AI.
+        //Rotate AI.
         if (madeRotation == false)
         {
             RotateAI();
@@ -53,15 +52,15 @@ public class PlayerScript : MonoBehaviour
         //If the list o apples are not empty and the player is not doing another action
         if (appleList.Count > 0 && doingAction == false && madeRotation == true)
         {
-            doingAction = true;
+            
             Action();
         }
         //While the searching apple is true the AI will move towards the apple.
         if (movingToApple == true)
         {
-            MoveToApple(nearestPosition);
+            MoveToApple(appleGameObj);
             //Look at apple
-            LookAtApple(nearestPosition);
+            LookAtApple(appleGameObj);
         }
     }
 
@@ -128,8 +127,6 @@ public class PlayerScript : MonoBehaviour
     {
         //Nearest Apple distance variable.
         float nearest = 1000000000f;
-        //Nearest position is initialiaze in the AI position.
-        nearestPosition = this.transform.position;
         AppleCycle appleCycleScript = null;
         //Check in list the nearest apple
         foreach (GameObject apple in appleList)
@@ -144,7 +141,7 @@ public class PlayerScript : MonoBehaviour
                 if (distance < nearest)
                 {
                     nearest = distance;
-                    nearestPosition = apple.transform.position;
+                    appleGameObj = apple;
                     appleCycleScript = apple.GetComponent<AppleCycle>();
                 }
                 movingToApple = true;
@@ -158,22 +155,27 @@ public class PlayerScript : MonoBehaviour
     }
 
     //Move AI to apple.
-    private void MoveToApple(Vector3 positionToMove)
+    private void MoveToApple(GameObject applePosition)
     {
-        //Check if the AI arrived at the apple position.
-        if (transform.position.x == positionToMove.x && transform.position.z == positionToMove.z)
+        if (applePosition != null)
         {
-            movingToApple = false;
+            //Check if the AI arrived at the apple position.
+            if (transform.position.x == applePosition.transform.position.x && transform.position.z == applePosition.transform.position.z)
+            {
+                movingToApple = false;
+            }
+            //Move the AI to the apple position.
+            Vector3 positionToMove = new Vector3(applePosition.transform.position.x, this.transform.position.y, applePosition.transform.position.z);
+            transform.position = Vector3.MoveTowards(this.transform.position, positionToMove, 1 * Time.deltaTime);
         }
-        //Move the AI to the apple position.
-        positionToMove = new Vector3(positionToMove.x, this.transform.position.y, positionToMove.z);
-        transform.position = Vector3.MoveTowards(this.transform.position, positionToMove, 1 * Time.deltaTime);
+        
     }
 
     //Wait 10 seconds to start searching the nearest apple.
     private IEnumerator StartFinding()
     {
         yield return new WaitForSeconds(3);
+        doingAction = true;
         NearestApple();
     }
 
@@ -231,17 +233,20 @@ public class PlayerScript : MonoBehaviour
     }
 
     //Look to the nearest apple, make the AI face the apple.
-    private void LookAtApple(Vector3 nearestPosition)
+    private void LookAtApple(GameObject appleGameObj)
     {
-        Vector3 dir = nearestPosition - transform.position;
-        //Y needs to be zero to the AI not rotate in another Axis.
-        dir.y = 0;
-        //Check if the dir is not zero.
-        if (dir != Vector3.zero)
+        if (appleGameObj != null)
         {
-            //Realizes the rotation.
-            Quaternion rot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1.5f * Time.deltaTime);
+            Vector3 dir = appleGameObj.transform.position - transform.position;
+            //Y needs to be zero to the AI not rotate in another Axis.
+            dir.y = 0;
+            //Check if the dir is not zero.
+            if (dir != Vector3.zero)
+            {
+                //Realizes the rotation.
+                Quaternion rot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1.5f * Time.deltaTime);
+            }
         }
     }
 

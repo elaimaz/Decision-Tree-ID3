@@ -78,8 +78,14 @@ public class AppleCycle : MonoBehaviour
             playerScript.searchingApple = false;
             //AI is no longer doing an action.
             playerScript.doingAction = false;
-            //Desalocate all list
+            //Desalocate all list.
             playerScript.ResetInList();
+            //Player no longer moves to apple.
+            playerScript.movingToApple = false;
+            //Rotation is needed to be done again.
+            playerScript.madeRotation = false;
+            //Rotation is reseted.
+            playerScript.rotationLeft = 360f;
             Destroy(this.gameObject);
         }
     }
