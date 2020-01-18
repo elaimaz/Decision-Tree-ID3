@@ -91,7 +91,7 @@ public class AppleCycle : MonoBehaviour
     }
 
     //randomize phase time of the apple and call AppleChangeTime().
-    private void appleChange()
+    public void appleChange()
     {
         time = Random.Range(10.0f, 20.0f);
         StartCoroutine(AppleChangeTime());
@@ -101,16 +101,19 @@ public class AppleCycle : MonoBehaviour
     private IEnumerator AppleChangeTime()
     {
         yield return new WaitForSeconds(time);
-        if (appleCount < 2)
+        if (inList == false)
         {
-            Destroy(apple[appleCount]);
-            appleCount++;
-            apple[appleCount].SetActive(true);
-            appleChange();
-        }
-        else
-        {
-            Destroy(this.gameObject);
+            if (appleCount < 2)
+            {
+                Destroy(apple[appleCount]);
+                appleCount++;
+                apple[appleCount].SetActive(true);
+                appleChange();
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 

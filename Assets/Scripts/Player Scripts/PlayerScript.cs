@@ -205,6 +205,8 @@ public class PlayerScript : MonoBehaviour
                 //Handler to AppleCycle script
                 AppleCycle appleCycle = apple.GetComponent<AppleCycle>();
                 appleCycle.inList = false;
+                //Test if the apple needed to be destroyed or no.
+                appleCycle.appleChange();
             }
         }
         CleanList();
