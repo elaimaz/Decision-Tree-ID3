@@ -13,6 +13,8 @@ public class AppleCycle : MonoBehaviour
     private int appleCount = 0;
     //Rigidbody to use gravity.
     private Rigidbody rb;
+    //Sphere Collider handler
+    private SphereCollider sphereCollider;
     //the probability of the apple fall.
     private float fallChance = 0;
     //Fall Status of an apple, false = yet in the tree and true = for fall
@@ -33,6 +35,7 @@ public class AppleCycle : MonoBehaviour
         apple[0].SetActive(true);
         appleChange();
         rb = gameObject.GetComponent<Rigidbody>();
+        sphereCollider = gameObject.GetComponent<SphereCollider>();
         InvokeRepeating("randomFall", 0f, 1f);
     }
 
@@ -53,21 +56,21 @@ public class AppleCycle : MonoBehaviour
 
     //WHen the player touches the apple the health bar will go up
     private void OnTriggerEnter(Collider other)
-    {
+    {   
         int appleGeneratedHealth = 1;
         //Green Apple.
         if (appleCount == 0)
         {
-            appleGeneratedHealth = 5;
+            appleGeneratedHealth = 15;
         //Red apple
         }else if (appleCount == 1)
         {
-            appleGeneratedHealth = 10;
+            appleGeneratedHealth = 30;
         }
         //Rotting apple.
         else
         {
-            appleGeneratedHealth = 1;
+            appleGeneratedHealth = 5;
         }
         //If it is the choosen apple then when Ai collides this changes will occur.
         if (other.tag == "Player" && chosenApple == true)
@@ -128,15 +131,19 @@ public class AppleCycle : MonoBehaviour
             rb.useGravity = true;
             //Set fall status to true.
             fallStatus = true;
+            //Activate collider.
+            sphereCollider.enabled = true;
         }else if (appleCount == 1 && fallChance >= 90)
         {
             rb.useGravity = true;
             fallStatus = true;
+            sphereCollider.enabled = true;
         }
         else if (appleCount == 2 && fallChance >= 80)
         {
             rb.useGravity = true;
             fallStatus = true;
+            sphereCollider.enabled = true;
         }
     }
 }
