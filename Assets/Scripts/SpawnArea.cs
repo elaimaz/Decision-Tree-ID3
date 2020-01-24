@@ -26,8 +26,8 @@ public class SpawnArea : MonoBehaviour
     //Randomize the number o apples per season.
     private void Randomizer()
     {
-        //set a random numer o apples to be spawned from 0 to 100.
-        randomApples = Random.Range(0, 100);
+        //set a random numer o apples to be spawned from 0 to 10.
+        randomApples = Random.Range(0, 10);
         SpawnApple();
     }
 

@@ -1,31 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!65 &508354894970013356
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254059357258321704}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.09203893, y: 0.10557197, z: 0.093840025}
-  m_Center: {x: 0.00030497648, y: 0.05283799, z: 0.000054053962}
---- !u!65 &6355228116795298686
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2583652434427980732}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.09203893, y: 0.10557197, z: 0.093840025}
-  m_Center: {x: 0.00030497648, y: 0.05283799, z: 0.000054053962}
 --- !u!1 &4994587052493469751
 GameObject:
   m_ObjectHideFlags: 0
@@ -38,7 +12,7 @@ GameObject:
   - component: {fileID: 1021564691}
   - component: {fileID: 742514006}
   - component: {fileID: 742514010}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Apple Cycle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4994587052493469751}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 2583652434427557788}
   - {fileID: 5406978010091471659}
@@ -78,6 +52,8 @@ MonoBehaviour:
   - {fileID: 2583652434427980732}
   - {fileID: 5405667171064037637}
   - {fileID: 1254059357258321704}
+  inList: 0
+  chosenApple: 0
 --- !u!54 &742514006
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -93,7 +69,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!135 &742514010
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -103,7 +79,7 @@ SphereCollider:
   m_GameObject: {fileID: 4994587052493469751}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.05
   m_Center: {x: 0, y: 0.04, z: 0}
@@ -169,11 +145,6 @@ PrefabInstance:
     - target: {fileID: 4000011667685464, guid: 8fa35cdad352cfa4297d3be64705ecf1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 65000012155365366, guid: 8fa35cdad352cfa4297d3be64705ecf1,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1000012063083088, guid: 8fa35cdad352cfa4297d3be64705ecf1, type: 3}
       propertyPath: m_Layer
