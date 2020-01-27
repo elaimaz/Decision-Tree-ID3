@@ -56,7 +56,8 @@ public class AppleCycle : MonoBehaviour
 
     //WHen the player touches the apple the health bar will go up
     private void OnTriggerEnter(Collider other)
-    {   
+    {
+        Debug.Log("OnTriggerEnter apple");
         int appleGeneratedHealth = 1;
         //Green Apple.
         if (appleCount == 0)

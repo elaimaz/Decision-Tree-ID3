@@ -228,9 +228,12 @@ public class PlayerScript : MonoBehaviour
         }
         //Make rotation in the Y axis.
         transform.Rotate(0, rotation, 0);
-        if (rotationLeft <= 0)
+        if (rotationLeft <= 0 && appleList.Count > 0)
         {
             madeRotation = true;
+        }else if (rotationLeft <= 0 && appleList.Count == 0)
+        {
+            rotationLeft = 360;
         }
     }
 
