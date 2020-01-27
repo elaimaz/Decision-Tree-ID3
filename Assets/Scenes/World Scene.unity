@@ -720,6 +720,7 @@ MonoBehaviour:
   searchingApple: 1
   movingToApple: 0
   doingAction: 0
+  rotationLeft: 360
   madeRotation: 0
 --- !u!1 &1603088148
 GameObject:
