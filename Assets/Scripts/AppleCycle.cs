@@ -10,7 +10,7 @@ public class AppleCycle : MonoBehaviour
     //Apple phase time control
     private float time = 0;
     //What apple is used, 0 green, 1 normal, 2 rotting.
-    private int appleCount = 0;
+    public int appleCount = 0;
     //Rigidbody to use gravity.
     private Rigidbody rb;
     //Sphere Collider handler
@@ -51,46 +51,6 @@ public class AppleCycle : MonoBehaviour
         {
             //Call playerConeView to test the sight of the "Player"
             playerScript.Sight(this.transform.position, this.gameObject);
-        }
-    }
-
-    //WHen the player touches the apple the health bar will go up
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("OnTriggerEnter apple");
-        int appleGeneratedHealth = 1;
-        //Green Apple.
-        if (appleCount == 0)
-        {
-            appleGeneratedHealth = 15;
-        //Red apple
-        }else if (appleCount == 1)
-        {
-            appleGeneratedHealth = 30;
-        }
-        //Rotting apple.
-        else
-        {
-            appleGeneratedHealth = 5;
-        }
-        //If it is the choosen apple then when Ai collides this changes will occur.
-        if (other.tag == "Player" && chosenApple == true)
-        {
-            //Buff Bar
-            playerScript.EatApple(appleGeneratedHealth);
-            //AI is no longer choosing apple.
-            playerScript.searchingApple = false;
-            //AI is no longer doing an action.
-            playerScript.doingAction = false;
-            //Desalocate all list.
-            playerScript.ResetInList();
-            //Player no longer moves to apple.
-            playerScript.movingToApple = false;
-            //Rotation is needed to be done again.
-            playerScript.madeRotation = false;
-            //Rotation is reseted.
-            playerScript.rotationLeft = 360f;
-            Destroy(this.gameObject);
         }
     }
 

@@ -22,15 +22,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     public bool searchingApple = false;
     //Boolean to control if the AI need to continue going after the apple.
-    public bool movingToApple = false;
+    private bool movingToApple = false;
     //Nearest Apple position variable.
     private GameObject appleGameObj;
     //controler to player doing action.
-    public bool doingAction = false;
+    private bool doingAction = false;
     //Amount of degrees to rotate
-    public float rotationLeft = 360f;
+    private float rotationLeft = 360f;
     //Control if the AI made a rotation.
-    public bool madeRotation = false;
+    private bool madeRotation = false;
 
     private void Start()
     {
@@ -194,7 +194,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     //This method will reset the variable of all the apples GameObject in the list appleList.
-    public void ResetInList()
+    private void ResetInList()
     {
         Debug.Log("ResetInList");
         foreach (GameObject apple in appleList)
@@ -252,6 +252,50 @@ public class PlayerScript : MonoBehaviour
                 Quaternion rot = Quaternion.LookRotation(dir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1.5f * Time.deltaTime);
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //If it is the choosen apple then when Ai collides this changes will occur.
+        if (other.tag == "Food")
+        {
+            AppleCycle foodScript = other.GetComponent<AppleCycle>();
+            if (foodScript.chosenApple == true)
+            {
+                int appleGeneratedHealth = 1;
+                //Green Apple.
+                if (foodScript.appleCount == 0)
+                {
+                    appleGeneratedHealth = 15;
+                    //Red apple
+                }
+                else if (foodScript.appleCount == 1)
+                {
+                    appleGeneratedHealth = 30;
+                }
+                //Rotting apple.
+                else
+                {
+                    appleGeneratedHealth = 5;
+                }
+                //Buff Bar
+                EatApple(appleGeneratedHealth);
+                //AI is no longer choosing apple.
+                searchingApple = false;
+                //AI is no longer doing an action.
+                doingAction = false;
+                //Desalocate all list.
+                ResetInList();
+                //Player no longer moves to apple.
+                movingToApple = false;
+                //Rotation is needed to be done again.
+                madeRotation = false;
+                //Rotation is reseted.
+                rotationLeft = 360f;
+                Destroy(other.gameObject);
+            }
+
         }
     }
 
