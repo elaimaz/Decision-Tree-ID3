@@ -172,6 +172,8 @@ public class PlayerScript : MonoBehaviour
         //Nearest Apple distance variable.
         float nearest = 1000000000f;
         AppleCycle appleCycleScript = null;
+        //Give weight for the decision of what apple to choose. When 1 == rotting apple, 2 == green apple and 3 == red apple.
+        int chooseWeight = 0;
         //Check in list the nearest apple
         foreach (GameObject apple in appleList)
         {
@@ -181,9 +183,11 @@ public class PlayerScript : MonoBehaviour
                 searchingApple = true;
                 //Distance variable between player and apple.
                 float distance = Vector3.Distance(apple.transform.position, this.transform.position);
+                int appleCycleIndex = ChooseBetterAppleByStatus(apple);
                 //Check if Distance from the apple is lesser than the previous apple
-                if (distance < nearest)
+                if (distance < nearest && appleCycleIndex > chooseWeight)
                 {
+                    chooseWeight = appleCycleIndex;
                     nearest = distance;
                     appleGameObj = apple;
                     appleCycleScript = apple.GetComponent<AppleCycle>();
@@ -191,10 +195,29 @@ public class PlayerScript : MonoBehaviour
                 movingToApple = true;
             }
         }
+        Debug.Log("Peso da Escolha: " + chooseWeight);
         //if the script is not null the variable chosen apple became true, this will control the next behavior of the AI.
         if (appleCycleScript != null)
         {
             appleCycleScript.chosenApple = true;
+        }
+    }
+
+    //This function will give a weight to the choose of he apple
+    private int ChooseBetterAppleByStatus(GameObject apple)
+    {
+        AppleCycle appleCycleScript = apple.GetComponent<AppleCycle>();
+        if (appleCycleScript.appleCount == 0)
+        {
+            return 2;
+        }
+        else if (appleCycleScript.appleCount == 1)
+        {
+            return 3;
+        }
+        else
+        {
+            return 1;
         }
     }
 
