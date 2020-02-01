@@ -60,10 +60,23 @@ public class PlayerScript : MonoBehaviour
         {
             RotateAI();
         }
+        //If are none apple around the player will go to the closet tree.
+        if (appleList.Count <= 0 && doingAction == false && madeRotation == true && treeList.Count > 0)
+        {
+            doingAction = true;
+            NearestTree();
+            //
+        }
         //If the list o apples are not empty and the player is not doing another action
         if (appleList.Count > 0 && doingAction == false && madeRotation == true)
         {
             Action();
+        }
+        //Move Towards the tree.
+        if (movingToTree == true && movingToApple == false)
+        {
+            MoveToTree(treeGameObj);
+            LookAtTree(treeGameObj);
         }
         //While the searching apple is true the AI will move towards the apple.
         if (movingToApple == true)
@@ -273,6 +286,7 @@ public class PlayerScript : MonoBehaviour
                     treeGameObj = tree;
                     treeScript = tree.GetComponent<TreeScript>();
                 }
+                movingToTree = true;
             }
         }
         //if the script is not null the variable chosen tree became true, this will control the next behavior of the AI.
@@ -391,10 +405,10 @@ public class PlayerScript : MonoBehaviour
         }
         //Make rotation in the Y axis.
         transform.Rotate(0, rotation, 0);
-        if (rotationLeft <= 0 && appleList.Count > 0)
+        if (rotationLeft <= 0 && (appleList.Count > 0 || treeList.Count > 0))
         {
             madeRotation = true;
-        }else if (rotationLeft <= 0 && appleList.Count == 0)
+        }else if (rotationLeft <= 0 && (appleList.Count == 0 || treeList.Count == 0))
         {
             rotationLeft = 360;
         }
@@ -406,6 +420,24 @@ public class PlayerScript : MonoBehaviour
         if (appleGameObj != null)
         {
             Vector3 dir = appleGameObj.transform.position - transform.position;
+            //Y needs to be zero to the AI not rotate in another Axis.
+            dir.y = 0;
+            //Check if the dir is not zero.
+            if (dir != Vector3.zero)
+            {
+                //Realizes the rotation.
+                Quaternion rot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1.5f * Time.deltaTime);
+            }
+        }
+    }
+
+    //Look to the nearest tree, make the AI face the tree.
+    private void LookAtTree(GameObject treeGameObj)
+    {
+        if (treeGameObj != null)
+        {
+            Vector3 dir = treeGameObj.transform.position - transform.position;
             //Y needs to be zero to the AI not rotate in another Axis.
             dir.y = 0;
             //Check if the dir is not zero.
