@@ -718,7 +718,7 @@ MonoBehaviour:
   starvationLevel: 0
   cutoff: 45
   searchingApple: 0
-  searchingTree: 1
+  searchingTree: 0
 --- !u!1 &1603088148
 GameObject:
   m_ObjectHideFlags: 0
