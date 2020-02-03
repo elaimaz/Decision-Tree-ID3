@@ -20,24 +20,35 @@ public class PlayerScript : MonoBehaviour
     private List<GameObject> treeList = new List<GameObject>();
     //Handler to starvation Bar
     private StatusBar starvationBar;
-    //Variable that controls if the AI is searching or not for apples.
-    public bool searchingApple = false;
-    //Boolean to control if the AI need to continue going after the apple.
-    private bool movingToApple = false;
-    //Boolean to control if the AI need to go to a tree.
-    private bool movingToTree = false;
     //Nearest Apple position variable.
     private GameObject appleGameObj = null;
     //Nearest Tree position variable.
     private GameObject treeGameObj = null;
-    //Variable that controls if the AI is searching or not for trees.
-    public bool searchingTree = false;
-    //controler to player doing action.
-    private bool doingAction = false;
     //Amount of degrees to rotate
+    [SerializeField]
     private float rotationLeft = 360f;
+    [Header("Booleans")]
+    //Variable that controls if the AI is searching or not for apples.
+    [SerializeField]
+    public bool searchingApple = false;
+    //Boolean to control if the AI need to continue going after the apple.
+    [SerializeField]
+    private bool movingToApple = false;
+    //Boolean to control if the AI need to go to a tree.
+    [SerializeField]
+    private bool movingToTree = false;
+    //Variable that controls if the AI is searching or not for trees.
+    [SerializeField]
+    public bool searchingTree = false;
+    //Check if the AI arrived at the tree.
+    private bool arrivedAtTree = false;
+    //controler to player doing action.
+    [SerializeField]
+    private bool doingAction = false;
     //Control if the AI made a rotation.
+    [SerializeField]
     private bool madeRotation = false;
+    private bool debugger = false;
 
     private void Start()
     {
@@ -49,20 +60,36 @@ public class PlayerScript : MonoBehaviour
         //If health bar is below 100 the AI starts search for apples.
         if (starvationBar.health < 100 && treeList.Count == 0)
         {
+            if (debugger == true)
+            {
+                Debug.Log("First IF");
+            }
             searchingTree = true;
         }
-        else if (starvationBar.health < 100 && treeList.Count > 0)
+        else if (starvationBar.health < 100 && treeList.Count > 0 && searchingApple == false)
         {
+            if (debugger == true)
+            {
+                Debug.Log("Second IF");
+            }
             searchingApple = true;
         }
         //Rotate AI.
         if (madeRotation == false && starvationBar.health < 100)
         {
+            if (debugger == true)
+            {
+                Debug.Log("Third IF");
+            }
             RotateAI();
         }
         //If are none apple around the player will go to the closet tree.
         if (appleList.Count <= 0 && doingAction == false && madeRotation == true && treeList.Count > 0)
         {
+            if (debugger == true)
+            {
+                Debug.Log("Fourth IF");
+            }
             doingAction = true;
             NearestTree();
             //
@@ -70,17 +97,29 @@ public class PlayerScript : MonoBehaviour
         //If the list o apples are not empty and the player is not doing another action
         if (appleList.Count > 0 && doingAction == false && madeRotation == true)
         {
+            if (debugger == true)
+            {
+                Debug.Log("Fifty IF");
+            }
             Action();
         }
         //Move Towards the tree.
         if (movingToTree == true && movingToApple == false)
         {
+            if (debugger == true)
+            {
+                Debug.Log("Sixty IF");
+            }
             MoveToTree(treeGameObj);
             LookAtTree(treeGameObj);
         }
         //While the searching apple is true the AI will move towards the apple.
         if (movingToApple == true)
         {
+            if (debugger == true)
+            {
+                Debug.Log("Seventh IF");
+            }
             MoveToApple(appleGameObj);
             //Look at apple
             LookAtApple(appleGameObj);
@@ -334,18 +373,23 @@ public class PlayerScript : MonoBehaviour
     //Move AI next to the tree.
     private void MoveToTree(GameObject treePosition)
     {
+        TreeScript treeScript = treePosition.GetComponent<TreeScript>();
         if (treePosition != null)
         {
-            //Check if the AI arrived at the apple position.
-            if (transform.position.x == treePosition.transform.position.x && transform.position.z == treePosition.transform.position.z)
+            if (Vector3.Distance(treePosition.transform.position, transform.position) > 5.0f)
             {
-                movingToApple = false;
+                //Move the AI to the apple position.
+                Vector3 positionToMove = new Vector3(treePosition.transform.position.x, this.transform.position.y, treePosition.transform.position.z);
+                transform.position = Vector3.MoveTowards(this.transform.position, positionToMove, 5 * Time.deltaTime);
+            }else
+            {
+                rotationLeft = 360;
+                doingAction = false;
+                movingToTree = false;
+                madeRotation = false;
+                debugger = true;
             }
-            //Move the AI to the apple position.
-            Vector3 positionToMove = new Vector3(treePosition.transform.position.x, this.transform.position.y, treePosition.transform.position.z);
-            transform.position = Vector3.MoveTowards(this.transform.position, positionToMove, 1 * Time.deltaTime);
         }
-
     }
 
     //Wait 10 seconds to start searching the nearest apple.
