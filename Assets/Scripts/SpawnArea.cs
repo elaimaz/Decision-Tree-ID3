@@ -19,8 +19,8 @@ public class SpawnArea : MonoBehaviour
     {
         //Get the height of the spawn position.
         spawnPosition.y = this.gameObject.transform.position.y;
-        //Repeat Randomizer() at every 1 minute. 
-        InvokeRepeating("Randomizer", 1f, 60f);
+        //Repeat Randomizer() at every 5 minutes. 
+        InvokeRepeating("Randomizer", 1f, 300f);
     }
 
     //Randomize the number o apples per season.
